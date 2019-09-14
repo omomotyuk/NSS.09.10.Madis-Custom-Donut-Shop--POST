@@ -4,6 +4,7 @@ import API from "./DataManager.js"
     dropdown.js is in charge of creating an populating the dropdowns for our donuts
 */
 const dropdown = {
+/*
     makeTypesDropDown: () => {
         API.getTypes().then(allTypes => {
             const typeDropdown = document.querySelector("#type-dropdown")
@@ -33,6 +34,16 @@ const dropdown = {
             const toppingDropdown = document.querySelector("#topping-dropdown")
             allToppings.forEach(topping => {
                 toppingDropdown.innerHTML += `<option id="topping-${topping.id}">${topping.name}</option>`
+            })
+        })
+    },
+*/
+    // the DRY-ed version:
+    makeInputDropDown: ( input ) => {
+        API.getItems( input ).then( allItems  => {
+            const dropDown = document.querySelector(`#${input.id}`)
+            allItems.forEach( item => {
+                dropDown.innerHTML += `<option id="${input.name}-${item.id}">${item.name}</option>`
             })
         })
     }
