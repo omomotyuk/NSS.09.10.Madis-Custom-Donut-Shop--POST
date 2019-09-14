@@ -3,6 +3,7 @@
 */
 
 const API = {
+/*    
     getTypes: () => {
         return fetch("http://localhost:8088/types")
             .then(response => response.json())
@@ -23,6 +24,13 @@ const API = {
         return fetch("http://localhost:8088/donuts")
             .then(response => response.json())
     },
+*/
+    // the DRY-ed version:
+    getItems: ( input ) => {
+        return fetch(`http://localhost:8088/${input.json_name}`)
+                .then( response => response.json() )
+    },
+
     createDonut: (tacoDonut) => {
         return fetch("http://localhost:8088/donuts", {
             method: "POST",

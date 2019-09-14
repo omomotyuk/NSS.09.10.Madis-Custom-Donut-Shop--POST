@@ -1,4 +1,4 @@
-import Dropdown from "./dropdown.js"
+import dropdown from "./dropdown.js"
 import createNewDonut from "./donut.js";
 import API from "./DataManager.js";
 import addDonutToDOM from "./donutDOM.js";
@@ -6,22 +6,53 @@ import addDonutToDOM from "./donutDOM.js";
 /*
     Make and populate dropdowns with API info when main.js is seen by browser
 */
+/*
 Dropdown.makeTypesDropDown();
 Dropdown.makeFlavorsDropDown();
 Dropdown.makeGlazesDropDown();
 Dropdown.makeToppingsDropDown();
+*/
 
+// DRY-ed version with the use of factoring function:
+const inputList = []
+
+const newInput = ( id, name, json_name ) => {
+    const input = {
+        id: id,
+        name: name,
+        json_name: json_name
+    }
+    return input
+}
+
+inputList[0] = newInput( "type-dropdown", "type", "types" )
+inputList[1] = newInput( "flavor-dropdown", "flavor", "flavors" )
+inputList[2] = newInput( "glaze-dropdown", "glaze", "glazes" )
+inputList[3] = newInput( "topping-dropdown", "topping", "toppings" )
+
+// the use of array-method:
+inputList.forEach( input => { dropdown.makeInputDropDown( input ) } )
+
+/*
 // This makes sure we have donuts when the page loads!
+
 API.getDonuts().then((allDonuts) => {
     allDonuts.forEach(donut => {
         addDonutToDOM(donut)
     })
 })
+*/
 
+// the "disposable" use of factoring function:
+API.getItems( newInput( "","","donuts" ) ).then(( allDonuts ) => {
+    allDonuts.forEach( donut => {
+        addDonutToDOM( donut )
+    })
+})
+// end of DRY-ing
 
 // Event listener for the 'create new donut' button
 document.querySelector("#donut-btn").addEventListener("click", () => {
-
 
     // 1. needs to get values of the inputs/dropdowns
     // they're stored in variables to use later
@@ -45,7 +76,6 @@ document.querySelector("#donut-btn").addEventListener("click", () => {
     // 5. I need to save donut to the json
     API.createDonut(newDonutObj).then(() => {
 
-
         // 6. get all the donuts again
         API.getDonuts().then((allDonuts) => {
             allDonuts.forEach(donut => {
@@ -53,6 +83,5 @@ document.querySelector("#donut-btn").addEventListener("click", () => {
                 addDonutToDOM(donut)
             })
         })
-
     })
 })
